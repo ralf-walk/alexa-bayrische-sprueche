@@ -1,0 +1,23 @@
+{
+  "name": "alexa-bayerische-sprueche",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bayerischerSpruch.js",
+  "dependencies": {
+    "alexa-sdk": "^1.0.21"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ralf-walk/alexa-bayrische-sprueche.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ralf-walk/alexa-bayrische-sprueche/issues"
+  },
+  "homepage": "https://github.com/ralf-walk/alexa-bayrische-sprueche#readme"
+}

@@ -1,7 +1,13 @@
 {
   "intents": [
     {
-      "intent": "TellBavarianIntent"
+      "intent": "BayerischerSpruchIntent",
+      "slots": [
+        {
+          "name": "spruchnummer",
+          "type": "AMAZON.NUMBER"
+        }
+      ]
     },
     {
       "intent": "AMAZON.HelpIntent"

@@ -11,6 +11,7 @@ const languageStrings = {
     'de': {
         translation: {
             SKILL_NAME: 'Bayerischer Spruch',
+            NO_SPRUCH_FOUND: (number) => `Konnte leider keinen Spruch mit der Nummer ${number} finden. Aktuell kenne ich ${bavarianSayings.length} Sprüche`,
             HELP_MESSAGE: 'Du kannst sagen, „rede bayrisch“, oder du kannst „Beenden“ sagen... Wie kann ich dir helfen?',
             HELP_REPROMPT: 'Wie kann ich dir helfen?',
             STOP_MESSAGE: 'Auf Wiedersehen!',
@@ -22,25 +23,44 @@ const bavarianSayings = [
     'Bessa zwoa Ring unta de Augn ois oa Ring am Finga.',
     'Da Mensch is wiar a oide Hosn, auf de Gnia wead a zeaschd hie.',
     'De guadn Gedankn und de hingadn Rooß kemma ollawei hintnach.',
-    'Des is füa de Katz.'
+    'Des is füa de Katz.',
+    'Wer ko, der ko',
+    'Nix Gwiss woass ma ned',
+    'De Woch fangt scho guat o',
+    'Do legst di nieda!',
+    'I zoag da glei, wo da Bartl an Most hoid',
+    'Des is ghupft wia gsprunga!',
+    'Kloaviech mocht aa Mist',
+    'Do schaugst oba oid aus',
+    'Ma sogt jo nix, ma redt jo bloß',
+    'Bled fickt guad',
+    'Wos schaugst so bläd?',
+    'Wos wuistn Du eigendle'
 ];
 
 const handlers = {
     'LaunchRequest': function () {
-        this.emit('TellBavarian');
+        this.emit('BayerischerSpruchIntent');
     },
-    'TellBavarianIntent': function () {
-        this.emit('TellBavarian');
-    },
-    'TellBavarian': function () {
-        const index = Math.floor(Math.random() * bavarianSayings.length);
-        const randomBavarianSaying = bavarianSayings[index];
+    'BayerischerSpruchIntent': function () {
 
-        // Create speech output
-        const speechOutput = randomBavarianSaying;
-        const cardTitle = this.t('SKILL_NAME');
-        const cardContent = randomBavarianSaying;
-        this.emit(':tellWithCard', speechOutput, cardTitle, cardContent);
+        const intent = this.event.request.intent;
+        const spruchnummer = (intent && intent.slots && intent.slots.spruchnummer) ? parseInt(intent.slots.spruchnummer.value): undefined;
+
+        const doSpeak = (speak) => {
+            const skillName = this.t('SKILL_NAME');
+            this.emit(':tellWithCard', speak, skillName, speak);
+        }
+
+        const anzSprueche = bavarianSayings.length;
+        if (spruchnummer && spruchnummer >= 1 && spruchnummer <= anzSprueche) {
+            doSpeak(bavarianSayings[spruchnummer - 1]);
+        } else if (spruchnummer || spruchnummer === 0) {
+            doSpeak(this.t('NO_SPRUCH_FOUND')(spruchnummer))
+        } else {
+            const spruchnummer = Math.floor(Math.random() * anzSprueche);
+            doSpeak(bavarianSayings[spruchnummer]);
+        }
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = this.t('HELP_MESSAGE');
